@@ -1027,12 +1027,13 @@ string clean_string(string str) {
     return output;
 }
 
-double f(string s, double x) {
+double f(string s, double x) { // returns the value of f at point x
     string str; double result;
     if(isinf(x) || isnan(x)) return numeric_limits<double>::infinity();
 
     if(s[0] != 'x') str.push_back(s[0]);
-    else str += "*" + doubleToString(x);
+    
+    else str += "*" + doubleToString(x); // i don't understand this but apparently it is needed
 
     for(int i = 1; i < s.size(); i++) {
         if(s[i] != 'x' || s[i-1] == 'e') str.push_back(s[i]);
@@ -1054,11 +1055,11 @@ double f(string s, double x) {
     return result;
 }
 
-double f_prime(string s, double x) {
+double f_prime(string s, double x) { // prime derivative of f at point x
     return (f(s, x + 10e-7) - f(s, x)) / 10e-7;
 }
 
-double newton(string s, double x) {
+double newton(string s, double x) { // Following Newton's method, we iteratively improve our guess
     int iter = -1; double back = x;
     while(abs(f(s, x)) > 10e-15 && iter++ < 2150) {
         x -= 0.5 * f(s, x) / f_prime(s, x);
@@ -1068,7 +1069,7 @@ double newton(string s, double x) {
     return x;
 }
 
-vector<double> solve_eq(string str) {
+vector<double> solve_eq(string str) { // to improve for trig solutions
     set<double> sols;
     vector<double> solutions;
 
@@ -1080,11 +1081,11 @@ vector<double> solve_eq(string str) {
         double x2 = newton(str, end);
 
 
-        if (std::isinf(x1) && std::isinf(x2)) {
+        if (std::isinf(x1) && std::isinf(x2)) { // if neither x1 nor x2 are finite, we skip this iteration, and lower absolute value of the range
             start++;
             end--;
             continue;
-        } else if (std::isinf(x1)) {
+        } else if (std::isinf(x1)) { // if only one of them is infinite and the other one is a solution, we add the solution and lower the range
             if (std::abs(f(str, x2)) <= tolerance) {
                 sols.insert(round(x2 * 1000.0) / 1000.0);
             }
@@ -1096,7 +1097,7 @@ vector<double> solve_eq(string str) {
             }
             start++;
             end--;
-        } else {
+        } else { // if both are finite, we check if they are solutions
             if (std::abs(f(str, x1)) <= tolerance) {
                 sols.insert(round(x1 * 1000.0) / 1000.0);
             }
@@ -1104,9 +1105,9 @@ vector<double> solve_eq(string str) {
                 sols.insert(round(x2 * 1000.0) / 1000.0);
             }
 
-            if (x1 == x2) {
+            if (x1 == x2) { // if both solutions are the same, we can stop searching
                 break;
-            } else {
+            } else { // if they are different, we continue searching in the middle of the range via binary search
                 double mid = (start + end) / 2;
                 double x_mid = newton(str, mid);
                 
@@ -1131,7 +1132,6 @@ vector<double> solve_eq(string str) {
 void calculator(string input) {
         string str = input;
 
-
         int brackets = 0;
         for(auto& i : str) {
             if(i == '(') brackets++;
@@ -1155,7 +1155,6 @@ void calculator(string input) {
             for(auto i:solutions) cout << i << '\n';
         }
     }
-
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
