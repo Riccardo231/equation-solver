@@ -1156,13 +1156,9 @@ void calculator(string input) {
         }
     }
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Error: no equation received.\n";
-        return 1;
-    }
-
-    std::string input = argv[1];
-    calculator(input);
-    return 0;
+int main() {
+    string str;
+    cout << "Inserire equazione";
+    cin >> str;
+    calculator(str);
 }
